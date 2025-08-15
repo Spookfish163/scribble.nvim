@@ -19,6 +19,7 @@ local function open_floating_window(opts)
 
 	if not vim.api.nvim_buf_is_valid(state.floating.buf) then
 		state.floating.buf = vim.api.nvim_create_buf(listed, scratch)
+		vim.api.nvim_buf_set_option(state.floating.buf, "filetype", "markdown")
 	end
 
 	local term_width = vim.o.columns
