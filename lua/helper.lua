@@ -1,8 +1,8 @@
-local state = require("lua.state")
+local state = require("state")
 
 local M = {}
 
-function M.open_floating_window(opts)
+local function open_floating_window(opts)
 	opts = opts or {}
 
 	if not vim.api.nvim_buf_is_valid(state.floating.buf) then
@@ -54,7 +54,7 @@ end
 
 function M.open_scribble()
 	if not vim.api.nvim_win_is_valid(state.floating.win) then
-		state.floating.win = M.open_floating_window()
+		state.floating.win = open_floating_window()
 	else
 		print("Scribble: Scribble window is already open")
 	end
@@ -70,7 +70,7 @@ end
 
 function M.toggle_scribble()
 	if not vim.api.nvim_win_is_valid(state.floating.win) then
-		state.floating.win = M.open_floating_window()
+		state.floating.win = open_floating_window()
 	else
 		vim.api.nvim_win_hide(state.floating.win)
 	end
