@@ -1,4 +1,5 @@
 local state = require("scribble.state")
+local buffer = require("scribble.buffer")
 local keymap = require("scribble.keymap")
 local config = require("scribble.config")
 local util = require("scribble.util")
@@ -37,25 +38,7 @@ end
 function M.open_floating_window(opts)
 	opts = opts or {}
 
-	if not vim.api.nvim_buf_is_valid(state.floating.buf) then
-		local listed = false
-		local scratch = true
-
-		state.floating.buf = vim.api.nvim_create_buf(listed, scratch)
-
-		local base_data_dir = string.format("%s/scratchpad", vim.fn.stdpath("data"))
-		local filename = "stupid_file_name"
-
-		-- vim.fn.mkdir(base_data_dir)
-
-		vim.api.nvim_buf_call(state.floating.buf, function()
-			vim.cmd("edit " .. base_data_dir .. "/" .. filename)
-			print(base_data_dir .. "/" .. filename)
-		end)
-
-		vim.api.nvim_set_option_value("filetype", "markdown", { buf = state.floating.buf })
-		vim.api.nvim_set_option_value("buflisted", false, { buf = state.floating.buf })
-	end
+	buffer.init_buffer()
 
 	local term_width = vim.o.columns
 	local term_height = vim.o.lines
