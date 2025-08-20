@@ -52,7 +52,14 @@ function M.init_data()
 	local base_data_dir = M.path_join(vim.fn.stdpath("data"), "scribble.nvim")
 	create_dir_if_not_exist(base_data_dir)
 
-	local filename = vim.fn.sha256(vim.fn.getcwd())
+	local filename
+	local current_dir = vim.fn.getcwd()
+
+	if M.check_git_availability() and M.check_git_dir(current_dir) then
+		filename = vim.fn.sha256(M.get_git_root(current_dir))
+	else
+		filename = vim.fn.sha256(current_dir)
+	end
 
 	local full_file_path = M.path_join(base_data_dir, filename)
 
@@ -60,6 +67,47 @@ function M.init_data()
 	vim.api.nvim_buf_call(state.floating.buf, function()
 		vim.cmd("edit " .. full_file_path)
 	end)
+end
+
+function M.check_git_availability()
+	---@diagnostic disable: need-check-nil
+	local handle = io.popen("git --version")
+
+	---@diagnostic disable-next-line: unused-local
+	local output = handle:read("*a")
+	local status = handle:close()
+
+	if status then
+		return true
+	else
+		print(
+			"Scribble: For some(one) extra functionality scribble needs git installed. dw if you don't have it. You can just ignore this warning"
+		)
+		return false
+	end
+end
+
+function M.check_git_dir(path)
+	local is_git_dir = io.popen("cd " .. path .. " && git rev-parse --is-inside-work-tree")
+
+	local out = is_git_dir:read("*l")
+
+	if not out then
+		is_git_dir:close()
+		return false
+	end
+
+	is_git_dir:close()
+	return true
+end
+
+function M.get_git_root(path)
+	local is_git_dir = io.popen("cd " .. path .. " && git rev-parse --show-toplevel")
+
+	local out = is_git_dir:read("*l")
+	is_git_dir:close()
+
+	return out
 end
 
 return M
