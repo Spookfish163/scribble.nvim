@@ -14,6 +14,16 @@ function M.init_buffer()
 
 		vim.api.nvim_set_option_value("filetype", "markdown", { buf = state.floating.buf })
 		vim.api.nvim_set_option_value("buflisted", false, { buf = state.floating.buf })
+
+		-- auto close the buffer if buffer lost focus
+		vim.api.nvim_create_autocmd("BufLeave", {
+			buffer = state.floating.buf,
+			callback = function()
+				if vim.api.nvim_win_is_valid(state.floating.win) then
+					vim.api.nvim_win_close(state.floating.win, true)
+				end
+			end,
+		})
 	end
 end
 
