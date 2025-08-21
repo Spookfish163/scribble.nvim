@@ -1,0 +1,112 @@
+# Scribble.nvim
+A place to write down your thoughts at the speed of thought.
+
+You also have a bunch of `notes.md`, `file.md`, `arst` (or `asdf`) everywhere
+in your filesystem? And never find the thing you need when in times of trouble?
+
+`scribble.nvim` is the solution to your problems! `scribble.nvim` creates the
+temporary `Scribblepad` and caters to all the problems you might have! It creates
+a new `Scribblepad` under the neovim "data" directory for every new directory. It
+smartly handles git directories too!
+
+[Screenshot/gif](dumbimageplaceholder.com)
+
+## Table of Contents
+
+- [Getting Started](#getting-started)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Customization](#customization)
+- [Default Mappings](#default-mappings)
+
+## Getting Started
+
+Fortunately `scribble.nvim` has no dependencies!! You can use it in a faily new
+neovim version! It has been tested to be fully functional in v0.12
+
+## Installation
+
+Using [packer.nvim](https://github.com/wbthomason/packer.nvim)
+
+```lua
+use {
+  'AnkushRoy-code/scribble.nvim'
+  -- startup idk figure it out yourself. I use lazy.nvim and you should too
+}
+```
+
+Using [lazy.nvim](https://github.com/folke/lazy.nvim)
+
+```lua
+-- init.lua:
+    {
+        'AnkushRoy-code/scribble.nvim'
+        config = function()
+            require("scribble")
+        end,
+        }
+    }
+
+-- plugins/scribble.lua:
+return {
+    'AnkushRoy-code/scribble.nvim'
+    config = function()
+        require("scribble")
+    end,
+    }
+}
+```
+
+## Usage
+
+Try the command `:Scribble` to see if `scribble.nvim` is installed correctly.
+
+Using VimL:
+
+```viml
+" Toggle Scrbble window
+nnoremap <leader>sc <cmd>Scribble toggle<cr>
+" You probably don't need these. The toggle and auto-close is good enough
+" nnoremap <leader>so <cmd>Scribble open<cr>
+" nnoremap <leader>sq <cmd>Scribble close<cr>
+
+" Using Lua functions
+nnoremap <leader>sc <cmd>lua require('scribble').toggle()<cr>
+" nnoremap <leader>so <cmd>lua require('scribble').open()<cr>
+" nnoremap <leader>sp <cmd>lua require('scribble').close()<cr>
+```
+
+Using Lua:
+
+```lua
+local scribble = require('scribble')
+vim.keymap.set('n', '<leader>sc', scribble.toggle, { desc = 'Scribble toggle' })
+-- vim.keymap.set('n', '<leader>so', scribble.open, { desc = 'Scribble open' })
+-- vim.keymap.set('n', '<leader>sq', scribble.close, { desc = 'Scribble open' })
+```
+
+
+## Customization
+
+This section should help you explore available options to configure and
+customize your `scribble.nvim`.
+
+
+```lua
+require('scribble').setup{
+  pos = "center", -- possible values are (center, N, S, E, W, NW,NE, SW, SE)
+  width = 0, -- any positive integer 
+  height = 0, -- any positive integer 
+}
+```
+
+## Default Mappings
+
+
+| Mappings       | Action                    |
+| -------------- | ------------------------- |
+| `<C-UP>`       | Move the window up        |
+| `<C-DOWN>`     | Move the window down      |
+| `<C-RIGHT>`    | Move the window right     |
+| `<C-LEFT>`     | Move the window left      |
+| `q/<ESC>`      | Quit the Scribble window  |

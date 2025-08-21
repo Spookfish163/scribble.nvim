@@ -1,5 +1,5 @@
 local state = require("scribble.state")
-local fs = require("lua.scribble.util.filesystem")
+local fs = require("scribble.util.filesystem")
 local git = require("scribble.util.git")
 
 local M = {}
