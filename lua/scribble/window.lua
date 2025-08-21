@@ -2,12 +2,12 @@ local state = require("scribble.state")
 local buffer = require("scribble.buffer")
 local keymap = require("scribble.keymap")
 local config = require("scribble.config")
-local util = require("scribble.util")
+local convert = require("scribble.util.pos_convert")
 
 local M = {}
 
 local function reopen_at(pos)
-	local pos_str = util.pos_to_str(pos)
+	local pos_str = convert.pos_to_str(pos)
 	if not pos_str then
 		return
 	end
@@ -82,7 +82,7 @@ function M.open_scribble_window(p_pos)
 	local pos = p_pos or state.floating.pos_str or config.options.pos or "center"
 
 	state.floating.pos_str = pos
-	state.floating.pos = util.str_to_pos(pos)
+	state.floating.pos = convert.str_to_pos(pos)
 
 	local term_width = vim.o.columns
 	local term_height = vim.o.lines
