@@ -1,6 +1,7 @@
 local M = {}
 
 local helper = require("scribble.helper")
+local picker = require("scribble.picker")
 
 function M.setup(opts)
 	local config = require("scribble.config")
@@ -16,5 +17,6 @@ M.move_window_right = helper.toggle_scribble
 M.move_window_left  = helper.toggle_scribble
 M.move_window_up    = helper.toggle_scribble
 M.move_window_down  = helper.toggle_scribble
+M.find				= picker.pick
 
 return M

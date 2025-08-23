@@ -1,32 +1,175 @@
-local fzf = require("fzf-lua")
-
 local M = {}
+
+-- https://github.com/kawre/leetcode.nvim/blob/master/lua/leetcode/picker/init.lua#L4-L63
+local provider_order = { "snacks-picker", "fzf-lua", "telescope" }
+
+local providers = {
+	["fzf-lua"] = {
+		name = "fzf",
+		is_available = function()
+			return pcall(require, "fzf-lua")
+		end,
+	},
+	["snacks-picker"] = {
+		name = "snacks",
+		is_available = function()
+			return pcall(function()
+				---@diagnostic disable-next-line: undefined-field, undefined-global
+				assert(Snacks.config["picker"].enabled)
+			end)
+		end,
+	},
+	["telescope"] = {
+		name = "telescope",
+		is_available = function()
+			return pcall(require, "telescope")
+		end,
+	},
+}
+
+local available_pickers = table.concat(
+	vim.tbl_map(function(p)
+		return providers[p].name
+	end, provider_order),
+	", "
+)
+
+---@return "fzf" | "telescope" | "snacks"
+local function resolve_provider()
+	---@type string
+	local provider = nil
+
+	if provider == nil then
+		for _, key in ipairs(provider_order) do
+			local picker = providers[key]
+
+			if picker.is_available() then
+				return picker.name
+			end
+		end
+
+		error(("No picker is available. Please install one of the following: `%s`") --
+			:format(available_pickers))
+	end
+
+	local picker = providers[provider]
+	assert(
+		picker,
+		("Picker `%s` is not supported. Available pickers: `%s`") --
+			:format(provider, available_pickers)
+	)
+
+	local ok = picker.is_available()
+	assert(ok, ("Picker `%s` is not available. Make sure it is installed"):format(provider))
+	return picker.name
+end
 
 -- get all the files
 -- https://stackoverflow.com/a/76675386
-local files =
-	vim.split(vim.fn.glob("/home/ankush/.local/share/nvim/scribble.nvim/" .. "/*"), "\n", { trimempty = true })
+local files = vim.split(vim.fn.glob("/home/ankush/.local/share/nvim/scribble.nvim" .. "/*"), "\n", { trimempty = true })
 local dfiles = {}
 local map = {} -- map the decoded filenames to the corresponding full paths
 
 for _, item in ipairs(files) do
 	local fname = vim.text.hexdecode(vim.fn.fnamemodify(item, ":t:r"))
 	table.insert(dfiles, fname)
+	---@diagnostic disable-next-line: need-check-nil
 	map[fname] = item
 end
 
--- ask the picker to find it
-local function run()
-	fzf.fzf_exec(dfiles, {
-		prompt = "Select a File > ",
-		actions = {
-			["default"] = function(selected)
-				vim.cmd("edit " .. map[selected[1]])
-			end,
-		},
-	})
-end
+local picker = resolve_provider()
 
-run()
+-- ask the picker to find it
+function M.pick()
+	if picker == "fzf" then
+		local fzf = require("fzf-lua")
+		fzf.fzf_exec(dfiles, {
+			prompt = "Select a File > ",
+			actions = {
+				["default"] = function(selected)
+					vim.cmd("edit " .. map[selected[1]])
+				end,
+			},
+		})
+
+		-- https://github.com/kawre/leetcode.nvim/blob/master/lua/leetcode/picker/question/snacks.lua
+	elseif picker == "snacks" then
+		local snacks_picker = require("snacks.picker")
+		local completed = false
+
+		local snacks_items = {}
+
+		for _, fname in ipairs(dfiles) do
+			table.insert(snacks_items, {
+				text = fname,
+				value = { { fname } },
+			})
+		end
+
+		snacks_picker.pick({
+			items = snacks_items,
+
+			format = function(item)
+				local val = (item and item.text) or (item and item.value and item.value.text) or tostring(item)
+				return { { val } }
+			end,
+
+			title = "Select a Question",
+			layout = {
+				preset = "select",
+			},
+
+			actions = {
+				confirm = function(p, item)
+					if completed then
+						return
+					end
+					completed = true
+					p:close()
+
+					vim.schedule(function()
+						vim.cmd("edit " .. map[item.text])
+					end)
+				end,
+			},
+
+			on_close = function()
+				if completed then
+					return
+				end
+				completed = true
+				print("No selection")
+			end,
+		})
+	elseif picker == "telescope" then
+		local pickers = require("telescope.pickers")
+		local finders = require("telescope.finders")
+		local actions = require("telescope.actions")
+		local action_state = require("telescope.actions.state")
+
+		pickers
+			.new(require("telescope.themes").get_dropdown(), {
+				prompt_title = "Select a Question",
+				finder = finders.new_table({
+					results = dfiles,
+					-- entry_maker = entry_maker,
+				}),
+				attach_mappings = function()
+					actions.select_default:replace(function()
+						local selection = action_state.get_selected_entry()
+						if not selection then
+							print("No selection")
+							return
+						end
+						vim.schedule(function()
+							vim.cmd("edit! " .. map[selection[1]])
+						end)
+					end)
+					return true
+				end,
+			})
+			:find()
+	end
+end
 
 return M
