@@ -18,9 +18,9 @@ function M.init_data()
 	local current_dir = vim.fn.getcwd()
 
 	if git.check_availability() and git.check_dir(current_dir) then
-		filename = vim.fn.sha256(git.get_root(current_dir))
+		filename = vim.text.hexencode(git.get_root(current_dir))
 	else
-		filename = vim.fn.sha256(current_dir)
+		filename = vim.text.hexencode(current_dir)
 	end
 
 	local full_file_path = fs.path_join(base_data_dir, filename)
