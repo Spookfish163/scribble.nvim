@@ -1,3 +1,5 @@
+local config = require("scribble.config")
+
 local M = {}
 
 -- https://github.com/kawre/leetcode.nvim/blob/master/lua/leetcode/picker/init.lua#L4-L63
@@ -88,10 +90,10 @@ for _, item in ipairs(files) do
 	::continue::
 end
 
-local picker = resolve_provider()
 
 -- ask the picker to find it
 function M.pick()
+	local picker = config.options.picker or resolve_provider()
 	if picker == "fzf" then
 		local fzf = require("fzf-lua")
 		fzf.fzf_exec(dfiles, {

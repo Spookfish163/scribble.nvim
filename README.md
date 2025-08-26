@@ -42,7 +42,7 @@ Using [lazy.nvim](https://github.com/folke/lazy.nvim)
     {
         'AnkushRoy-code/scribble.nvim'
         config = function()
-            require("scribble")
+            require("scribble").setup()
         end,
         }
     }
@@ -51,10 +51,35 @@ Using [lazy.nvim](https://github.com/folke/lazy.nvim)
 return {
     'AnkushRoy-code/scribble.nvim'
     config = function()
-        require("scribble")
+        require("scribble").setup()
     end,
     }
 }
+```
+
+A simple working configuration with the following mapping:
+| Mappings       | Action                         |
+| -------------- | -------------------------      |
+| `Ctrl-L`       | Toggle the scribble pad        |
+| `<leader>sl`   | Open the list of scribble pads |
+
+
+```lua
+return {
+	"AnkushRoy-code/scribble.nvim",
+	event = "VeryLazy",
+
+	config = function()
+		local scribble = require("scribble")
+		scribble.setup({
+			pos = "center",
+		})
+
+		vim.keymap.set("n", "<C-l>", scribble.toggle, { desc = "Toggle Scribble" })
+		vim.keymap.set("n", "<leader>sl", scribble.find, { desc = "Fuzzy find scribble pads" })
+	end,
+}
+
 ```
 
 ## Usage
@@ -95,6 +120,7 @@ customize your `scribble.nvim`.
 ```lua
 require('scribble').setup{
   pos = "center", -- possible values are (center, N, S, E, W, NW,NE, SW, SE)
+  picker = nil, -- possible values are (fzf, snacks, telescope)
   width = 0, -- any positive integer 
   height = 0, -- any positive integer 
 }

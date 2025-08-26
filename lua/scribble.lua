@@ -1,7 +1,7 @@
-local M = {}
-
 local helper = require("scribble.helper")
 local picker = require("scribble.picker")
+
+local M = {}
 
 function M.setup(opts)
 	local config = require("scribble.config")
