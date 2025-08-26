@@ -101,7 +101,7 @@ function M.pick()
 			actions = {
 				["default"] = function(selected)
 					vim.cmd("edit " .. map[selected[1]])
-					vim.api.nvim_set_option_value("filetype", "markdown", { buf = vim.api.nvim_get_current_buf() })
+					vim.api.nvim_set_option_value("filetype", config.options.filetype, { buf = vim.api.nvim_get_current_buf() })
 				end,
 			},
 		})
@@ -143,7 +143,7 @@ function M.pick()
 
 					vim.schedule(function()
 						vim.cmd("edit " .. map[item.text])
-						vim.api.nvim_set_option_value("filetype", "markdown", { buf = vim.api.nvim_get_current_buf() })
+						vim.api.nvim_set_option_value("filetype", config.options.filetype, { buf = vim.api.nvim_get_current_buf() })
 					end)
 				end,
 			},
@@ -178,7 +178,7 @@ function M.pick()
 						end
 						vim.schedule(function()
 							vim.cmd("edit! " .. map[selection[1]])
-							vim.api.nvim_set_option_value("filetype", "markdown",
+							vim.api.nvim_set_option_value("filetype", config.options.filetype,
 								{ buf = vim.api.nvim_get_current_buf() })
 						end)
 					end)

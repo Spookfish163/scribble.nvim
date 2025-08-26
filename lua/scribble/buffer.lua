@@ -13,7 +13,7 @@ function M.init_buffer()
 
 		data.init_data()
 
-		vim.api.nvim_set_option_value("filetype", "markdown", { buf = state.floating.buf })
+		vim.api.nvim_set_option_value("filetype", config.options.filetype, { buf = state.floating.buf })
 		vim.api.nvim_set_option_value("buflisted", false, { buf = state.floating.buf })
 
 		-- auto close the buffer if buffer lost focus

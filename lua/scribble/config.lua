@@ -6,6 +6,7 @@ local defaults = {
 	pos = "center",
 	picker = nil,
 	auto_save = true,
+	filetype = "markdown",
 }
 
 M.options = vim.deepcopy(defaults)
