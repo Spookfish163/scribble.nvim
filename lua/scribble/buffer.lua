@@ -23,7 +23,7 @@ function M.init_buffer()
 					vim.api.nvim_win_close(state.floating.win, true)
 				end
 				vim.api.nvim_buf_call(state.floating.buf, function()
-					vim.cmd("write")
+					vim.cmd("silent write")
 				end)
 			end,
 		})

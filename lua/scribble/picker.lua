@@ -56,7 +56,7 @@ local function resolve_provider()
 	assert(
 		picker,
 		("Picker `%s` is not supported. Available pickers: `%s`") --
-			:format(provider, available_pickers)
+		:format(provider, available_pickers)
 	)
 
 	local ok = picker.is_available()
@@ -71,10 +71,21 @@ local dfiles = {}
 local map = {} -- map the decoded filenames to the corresponding full paths
 
 for _, item in ipairs(files) do
-	local fname = vim.text.hexdecode(vim.fn.fnamemodify(item, ":t:r"))
+	local raw = vim.fn.fnamemodify(item, ":t")
+	if not raw or raw == "" then
+		goto continue
+	end
+
+	local fname = vim.text.hexdecode(raw)
+
+	if not fname or fname == "" then
+		goto continue
+	end
+
 	table.insert(dfiles, fname)
-	---@diagnostic disable-next-line: need-check-nil
 	map[fname] = item
+
+	::continue::
 end
 
 local picker = resolve_provider()
@@ -88,6 +99,7 @@ function M.pick()
 			actions = {
 				["default"] = function(selected)
 					vim.cmd("edit " .. map[selected[1]])
+					vim.api.nvim_set_option_value("filetype", "markdown", { buf = vim.api.nvim_get_current_buf() })
 				end,
 			},
 		})
@@ -129,6 +141,7 @@ function M.pick()
 
 					vim.schedule(function()
 						vim.cmd("edit " .. map[item.text])
+						vim.api.nvim_set_option_value("filetype", "markdown", { buf = vim.api.nvim_get_current_buf() })
 					end)
 				end,
 			},
@@ -163,6 +176,8 @@ function M.pick()
 						end
 						vim.schedule(function()
 							vim.cmd("edit! " .. map[selection[1]])
+							vim.api.nvim_set_option_value("filetype", "markdown",
+								{ buf = vim.api.nvim_get_current_buf() })
 						end)
 					end)
 					return true
