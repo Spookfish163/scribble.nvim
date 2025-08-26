@@ -120,10 +120,10 @@ customize your `scribble.nvim`. These are the default values
 ```lua
 require('scribble').setup{
   pos = "center", -- possible values are (center, N, S, E, W, NW,NE, SW, SE)
-  picker = nil, -- possible values are (fzf, snacks, telescope)
+  picker = nil, -- possible values are (fzf, snacks, telescope, nil)
   auto_save = true, -- boolean
-  width = -1, -- any positive integer 
-  height = -1, -- any positive integer 
+  width = -1, -- any positive integer, -1 means will use 75% of the total width
+  height = -1, -- any positive integer, -1 means will use 50% of the total height
 }
 ```
 
