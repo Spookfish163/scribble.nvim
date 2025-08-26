@@ -155,3 +155,10 @@ AI didn't write a single word in this repo. I take pride in saying that I
 didn't use AI not to slow down progress but to learn through the struggels,
 problems and sufferings that make me a better raw programmer.
 
+# Contributing
+
+It's all chil out here. Feel free to contribute
+
+# Related Projects
+
+- [scratchpad.nvim](https://github.com/athar-qadri/scratchpad.nvim)
