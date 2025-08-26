@@ -186,6 +186,8 @@ function M.pick()
 				end,
 			})
 			:find()
+	else
+		print("Picker not recognised: " .. picker .. "possible values are fzf, snackes, telescope")
 	end
 end
 

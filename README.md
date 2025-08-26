@@ -114,15 +114,16 @@ vim.keymap.set('n', '<leader>sc', scribble.toggle, { desc = 'Scribble toggle' })
 ## Customization
 
 This section should help you explore available options to configure and
-customize your `scribble.nvim`.
+customize your `scribble.nvim`. These are the default values
 
 
 ```lua
 require('scribble').setup{
   pos = "center", -- possible values are (center, N, S, E, W, NW,NE, SW, SE)
   picker = nil, -- possible values are (fzf, snacks, telescope)
-  width = 0, -- any positive integer 
-  height = 0, -- any positive integer 
+  auto_save = true, -- boolean
+  width = -1, -- any positive integer 
+  height = -1, -- any positive integer 
 }
 ```
 

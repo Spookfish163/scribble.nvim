@@ -123,7 +123,11 @@ function M.open_scribble_window(p_pos)
 		col = math.max(1, term_width - width)
 		row = (term_height - height) / 2
 	else
-		error("Scribble: Unrecognised window positio, possible values are (center, N, S, E, W, NW,NE, SW, SE)")
+		error(
+			"Scribble: Unrecognised window positio: "
+			.. pos
+			.. " possible values are (center, N, S, E, W, NW,NE, SW, SE)"
+		)
 	end
 
 	return M.open_floating_window({

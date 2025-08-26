@@ -1,5 +1,6 @@
 local state = require("scribble.state")
 local data = require("scribble.data")
+local config = require("scribble.config")
 
 local M = {}
 
@@ -22,9 +23,11 @@ function M.init_buffer()
 				if vim.api.nvim_win_is_valid(state.floating.win) then
 					vim.api.nvim_win_close(state.floating.win, true)
 				end
-				vim.api.nvim_buf_call(state.floating.buf, function()
-					vim.cmd("silent write")
-				end)
+				if config.options.auto_save then
+					vim.api.nvim_buf_call(state.floating.buf, function()
+						vim.cmd("silent write")
+					end)
+				end
 			end,
 		})
 	end

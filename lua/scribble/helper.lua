@@ -36,7 +36,7 @@ function M.handle_scribble_args(args)
 		elseif args.args == "close" then
 			M.close_scribble()
 		else
-			print("Scribble: Unrecognised argument")
+			print("Scribble: Unrecognised argument :" .. args.args)
 		end
 	end
 end

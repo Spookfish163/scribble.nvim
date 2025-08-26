@@ -5,6 +5,7 @@ local defaults = {
 	height = -1,
 	pos = "center",
 	picker = nil,
+	auto_save = true,
 }
 
 M.options = vim.deepcopy(defaults)
