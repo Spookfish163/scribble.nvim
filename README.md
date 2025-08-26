@@ -110,3 +110,21 @@ require('scribble').setup{
 | `<C-RIGHT>`    | Move the window right     |
 | `<C-LEFT>`     | Move the window left      |
 | `q/<ESC>`      | Quit the Scribble window  |
+
+
+# AI Usage
+
+This is not AI usage. And neither my plugin has anything to do with AI. I just
+have it to clarify AI usage to some concerned personalities.
+
+Did I use AI? Yes I did. But I primarilly use AI as a Google replacement. I use
+it to search for things. Not to make me things.
+
+For example: When I needed a way to add markdown formatting to some file
+without any suffix/extensions. I asked it to guide tell me how I can do it.
+Then I reffered the docs and did the rest myself.
+
+AI didn't write a single word in this repo. I take pride in saying that I
+didn't use AI not to slow down progress but to learn through the struggels,
+problems and sufferings that make me a better raw programmer.
+
