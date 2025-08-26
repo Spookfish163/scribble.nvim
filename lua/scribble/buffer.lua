@@ -22,6 +22,9 @@ function M.init_buffer()
 				if vim.api.nvim_win_is_valid(state.floating.win) then
 					vim.api.nvim_win_close(state.floating.win, true)
 				end
+				vim.api.nvim_buf_call(state.floating.buf, function()
+					vim.cmd("write")
+				end)
 			end,
 		})
 	end
