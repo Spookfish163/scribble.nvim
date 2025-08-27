@@ -1,4 +1,3 @@
-
 local M = {}
 
 function M.check_availability()
@@ -19,26 +18,32 @@ function M.check_availability()
 	end
 end
 
+local is_windows = vim.loop.os_uname().sysname == "Windows"
+local devnull = is_windows and "2>NULL" or "2>/dev/null"
+
 function M.check_dir(path)
-	local is_git_dir = io.popen("cd " .. path .. " && git rev-parse --is-inside-work-tree")
+	local cmd = "cd " .. path .. " && git rev-parse --is-inside-work-tree " .. devnull
 
-	local out = is_git_dir:read("*l")
-
-	if not out then
-		is_git_dir:close()
+	local is_git_dir = io.popen(cmd, "r")
+	if not is_git_dir then
 		return false
 	end
 
+	local out = is_git_dir:read("*l")
 	is_git_dir:close()
-	return true
+	return out == "true"
 end
 
 function M.get_root(path)
-	local is_git_dir = io.popen("cd " .. path .. " && git rev-parse --show-toplevel")
+	local cmd = "cd " .. path .. " && git rev-parse --show-toplevel " .. devnull
 
-	local out = is_git_dir:read("*l")
-	is_git_dir:close()
+	local get_root_dir = io.popen(cmd, "r")
+	if not get_root_dir then
+		return nil
+	end
 
+	local out = get_root_dir:read("*l")
+	get_root_dir:close()
 	return out
 end
 
