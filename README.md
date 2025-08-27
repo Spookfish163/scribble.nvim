@@ -9,6 +9,8 @@ temporary `Scribblepad` and caters to all the problems you might have! It create
 a new `Scribblepad` under the neovim "data" directory for every new directory. It
 smartly handles git directories too!
 
+<img width="1346" height="705" alt="2025-08-27_11-50" src="https://github.com/user-attachments/assets/eb18c559-e36d-462d-b230-38e74c93401a" />
+
 
 https://github.com/user-attachments/assets/ac643403-1215-4222-9913-3352d2678e3f
 
