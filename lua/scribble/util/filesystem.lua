@@ -1,3 +1,4 @@
+local config = require("scribble.config")
 local M = {}
 
 -- the path join function is taken from reddit here:
@@ -38,6 +39,40 @@ M.path_join = function(...)
 		vim.list_extend(all_parts, arg_parts)
 	end
 	return table.concat(all_parts, M.path_separator)
+end
+
+M.encode = function(path, encoding)
+	local enc = config.options.encoding or encoding
+
+	if enc == "hex" then
+		return vim.text.hexencode(path)
+	elseif enc == "underscore" then
+		-- Fallback to hex if path contains quotes
+		if string.find(path, '"') or string.find(path, "'") then
+			return vim.text.hexencode(path)
+        end
+		local spaced = string.gsub(path, M.path_separator, " ")
+		return '"' .. spaced .. '"'
+	else
+		print("ScribbleError: Unknown file encoding! Use 'hex' or 'underscore'")
+	end
+end
+
+M.decode = function(path, encoding)
+	local enc = config.options.encoding or encoding
+
+	if enc == "hex" then
+		return vim.text.hexdecode(path)
+	elseif enc == "underscore" then
+        -- Check if it was actually hex-encoded due to the fallback by looking for quotes
+		if not (path:sub(1,1) == '"' and path:sub(-1) == '"') then
+			return vim.text.hexdecode(path)
+		end
+		local unquoted = path:sub(2, -2)
+		return string.gsub(unquoted, " ", M.path_separator)
+	else
+		print("ScribbleError: Unknown file encoding! Use 'hex' or 'underscore'")
+	end
 end
 
 return M
