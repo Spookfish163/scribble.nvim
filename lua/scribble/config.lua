@@ -9,6 +9,7 @@ local defaults = {
 	filetype = "markdown",
 	extension = "",
 	path = nil,
+	encoding = "hex",
 }
 
 M.options = vim.deepcopy(defaults)
