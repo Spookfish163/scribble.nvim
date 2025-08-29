@@ -1,4 +1,5 @@
 local config = require("scribble.config")
+local data = require("scribble.data")
 
 local M = {}
 
@@ -68,31 +69,37 @@ end
 
 -- get all the files
 -- https://stackoverflow.com/a/76675386
-local files = vim.split(vim.fn.glob("/home/ankush/.local/share/nvim/scribble.nvim" .. "/*"), "\n", { trimempty = true })
 local dfiles = {}
 local map = {} -- map the decoded filenames to the corresponding full paths
 
-for _, item in ipairs(files) do
-	local raw = vim.fn.fnamemodify(item, ":t")
-	if not raw or raw == "" then
-		goto continue
+local function populate_file_list()
+	dfiles = {}
+	map = {}
+
+	local files = vim.split(vim.fn.glob(data.get_storage_dir() .. "/*"), "\n", { trimempty = true })
+
+	for _, item in ipairs(files) do
+		local raw = vim.fn.fnamemodify(item, ":t")
+		if not raw or raw == "" then
+			goto continue
+		end
+
+		local fname = vim.text.hexdecode(raw)
+
+		if not fname or fname == "" then
+			goto continue
+		end
+
+		table.insert(dfiles, fname)
+		map[fname] = item
+
+		::continue::
 	end
-
-	local fname = vim.text.hexdecode(raw)
-
-	if not fname or fname == "" then
-		goto continue
-	end
-
-	table.insert(dfiles, fname)
-	map[fname] = item
-
-	::continue::
 end
-
 
 -- ask the picker to find it
 function M.pick()
+	populate_file_list()
 	local picker = config.options.picker or resolve_provider()
 	if picker == "fzf" then
 		local fzf = require("fzf-lua")
@@ -101,7 +108,8 @@ function M.pick()
 			actions = {
 				["default"] = function(selected)
 					vim.cmd("edit " .. map[selected[1]])
-					vim.api.nvim_set_option_value("filetype", config.options.filetype, { buf = vim.api.nvim_get_current_buf() })
+					vim.api.nvim_set_option_value("filetype", config.options.filetype,
+						{ buf = vim.api.nvim_get_current_buf() })
 				end,
 			},
 		})
@@ -143,7 +151,8 @@ function M.pick()
 
 					vim.schedule(function()
 						vim.cmd("edit " .. map[item.text])
-						vim.api.nvim_set_option_value("filetype", config.options.filetype, { buf = vim.api.nvim_get_current_buf() })
+						vim.api.nvim_set_option_value("filetype", config.options.filetype,
+							{ buf = vim.api.nvim_get_current_buf() })
 					end)
 				end,
 			},

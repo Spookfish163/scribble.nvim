@@ -7,6 +7,7 @@ local defaults = {
 	picker = nil,
 	auto_save = true,
 	filetype = "markdown",
+	path = nil,
 }
 
 M.options = vim.deepcopy(defaults)

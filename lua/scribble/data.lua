@@ -1,17 +1,20 @@
 local state = require("scribble.state")
+local config = require("scribble.config")
 local fs = require("scribble.util.filesystem")
 local git = require("scribble.util.git")
 
 local M = {}
 
 local function create_dir_if_not_exist(path)
-	if vim.fn.isdirectory(path) then
-		vim.fn.mkdir(path, "-p")
-	end
+	vim.fn.mkdir(vim.fn.fnamemodify(path, ":p"), "p")
+end
+
+function M.get_storage_dir()
+	return config.options.path or fs.path_join(vim.fn.stdpath("data"), "scribble.nvim")
 end
 
 function M.init_data()
-	local base_data_dir = fs.path_join(vim.fn.stdpath("data"), "scribble.nvim")
+	local base_data_dir = M.get_storage_dir()
 	create_dir_if_not_exist(base_data_dir)
 
 	local filename
@@ -30,6 +33,5 @@ function M.init_data()
 		vim.cmd("edit " .. full_file_path)
 	end)
 end
-
 
 return M
