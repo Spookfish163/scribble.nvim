@@ -129,6 +129,7 @@ require('scribble').setup{
   filetype = "markdown", -- the filetype you want of the scribble-pads
   width = -1, -- any positive integer, -1 means will use 75% of the total width
   height = -1, -- any positive integer, -1 means will use 50% of the total height
+  path = nil, -- full path to the storage directory, nil will use the standard storage directory inside `~/.local/share/nvim` or equivalent
 }
 ```
 
