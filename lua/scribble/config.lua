@@ -7,6 +7,7 @@ local defaults = {
 	picker = nil,
 	auto_save = true,
 	filetype = "markdown",
+	extension = "",
 	path = nil,
 }
 

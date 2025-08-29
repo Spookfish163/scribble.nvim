@@ -84,7 +84,9 @@ local function populate_file_list()
 			goto continue
 		end
 
-		local fname = vim.text.hexdecode(raw)
+		local raw_noext = vim.fn.fnamemodify(item, ":t:r")
+
+		local fname = vim.text.hexdecode(raw_noext)
 
 		if not fname or fname == "" then
 			goto continue

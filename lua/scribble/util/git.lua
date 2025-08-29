@@ -39,7 +39,7 @@ function M.get_root(path)
 
 	local get_root_dir = io.popen(cmd, "r")
 	if not get_root_dir then
-		return nil
+		print("ScribbleError: scribble thought that the plugin is a git dir but git says otherwise!")
 	end
 
 	local out = get_root_dir:read("*l")
