@@ -125,10 +125,11 @@ customize your `scribble.nvim`. These are the default values
 require('scribble').setup{
   pos = "center", -- possible values are (center, N, S, E, W, NW,NE, SW, SE)
   picker = nil, -- possible values are (fzf, snacks, telescope, nil)
-  auto_save = true, -- boolean
   filetype = "markdown", -- the filetype you want of the scribble-pads
+  extension = "", -- the file_extension you want, for example ".md"
   width = -1, -- any positive integer, -1 means will use 75% of the total width
   height = -1, -- any positive integer, -1 means will use 50% of the total height
+  auto_save = true, -- boolean
   path = nil, -- full path to the storage directory, nil will use the standard storage directory inside `~/.local/share/nvim` or equivalent
 }
 ```
