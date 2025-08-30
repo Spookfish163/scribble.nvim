@@ -42,7 +42,7 @@ M.path_join = function(...)
 end
 
 M.encode = function(path, encoding)
-	local enc = config.options.encoding or encoding
+	local enc = encoding or config.options.encoding or "hex"
 
 	if enc == "hex" then
 		return vim.text.hexencode(path)
@@ -50,26 +50,41 @@ M.encode = function(path, encoding)
 		-- Fallback to hex if path contains quotes
 		if string.find(path, '"') or string.find(path, "'") then
 			return vim.text.hexencode(path)
-        end
-		local spaced = string.gsub(path, M.path_separator, " ")
-		return '"' .. spaced .. '"'
+		end
+
+		-- if name contains _ change it to __
+		local spaced = string.gsub(path, "_", "__")
+		-- if name contains / change it to _
+		spaced = string.gsub(spaced, M.path_separator, "_")
+		return spaced
 	else
 		print("ScribbleError: Unknown file encoding! Use 'hex' or 'underscore'")
 	end
 end
 
 M.decode = function(path, encoding)
-	local enc = config.options.encoding or encoding
+	local enc = encoding or config.options.encoding or "hex"
 
 	if enc == "hex" then
 		return vim.text.hexdecode(path)
 	elseif enc == "underscore" then
-        -- Check if it was actually hex-encoded due to the fallback by looking for quotes
-		if not (path:sub(1,1) == '"' and path:sub(-1) == '"') then
+		-- Check if it was actually hex-encoded due to the fallback by looking for quotes
+		if not (path:sub(1, 1) == '"' and path:sub(-1) == '"') then
 			return vim.text.hexdecode(path)
 		end
+
 		local unquoted = path:sub(2, -2)
-		return string.gsub(unquoted, " ", M.path_separator)
+		local tmp_text = "riset1209384rsite123"
+
+		-- change "__" to some random text
+		local out = string.gsub(unquoted, "__", tmp_text)
+
+		-- change "_" to seperator
+		out = string.gsub(out, "_", M.path_separator)
+
+		-- change the random text to "_"
+		out = string.gsub(out, tmp_text, "_")
+		return out
 	else
 		print("ScribbleError: Unknown file encoding! Use 'hex' or 'underscore'")
 	end
