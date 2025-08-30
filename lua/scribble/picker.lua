@@ -1,5 +1,6 @@
 local config = require("scribble.config")
 local data = require("scribble.data")
+local fs = require("scribble.util.filesystem")
 
 local M = {}
 
@@ -86,7 +87,7 @@ local function populate_file_list()
 
 		local raw_noext = vim.fn.fnamemodify(item, ":t:r")
 
-		local fname = vim.text.hexdecode(raw_noext)
+		local fname = fs.decode(raw_noext)
 
 		if not fname or fname == "" then
 			goto continue
