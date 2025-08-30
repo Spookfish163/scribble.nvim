@@ -1,4 +1,3 @@
-local config = require("scribble.config")
 local M = {}
 
 -- the path join function is taken from reddit here:
@@ -39,29 +38,6 @@ M.path_join = function(...)
 		vim.list_extend(all_parts, arg_parts)
 	end
 	return table.concat(all_parts, M.path_separator)
-end
-
-M.encode = function(path, encoding)
-	local enc = config.options.encoding or encoding
-
-	if enc == "hex" then
-		return vim.text.hexencode(path)
-	elseif enc == "underscore" then
-
-	else
-		print("ScribbleError: Unknown file encoding! Use 'hex' or 'underscore'")
-	end
-end
-
-M.decode = function(path, encoding)
-	local enc = config.options.encoding or encoding
-
-	if enc == "hex" then
-		return vim.text.hexdecode(path)
-	elseif enc == "underscore" then
-	else
-		print("ScribbleError: Unknown file encoding! Use 'hex' or 'underscore'")
-	end
 end
 
 return M
