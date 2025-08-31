@@ -47,11 +47,6 @@ M.encode = function(path, encoding)
 	if enc == "hex" then
 		return vim.text.hexencode(path)
 	elseif enc == "underscore" then
-		-- Fallback to hex if path contains quotes
-		if string.find(path, '"') or string.find(path, "'") then
-			return vim.text.hexencode(path)
-		end
-
 		-- if name contains _ change it to __
 		local spaced = string.gsub(path, "_", "__")
 		-- if name contains / change it to _
@@ -68,11 +63,6 @@ M.decode = function(path, encoding)
 	if enc == "hex" then
 		return vim.text.hexdecode(path)
 	elseif enc == "underscore" then
-		-- Check if it was actually hex-encoded due to the fallback by looking for quotes
-		if not (path:sub(1, 1) == '"' and path:sub(-1) == '"') then
-			return vim.text.hexdecode(path)
-		end
-
 		local unquoted = path:sub(2, -2)
 		local tmp_text = "riset1209384rsite123"
 
