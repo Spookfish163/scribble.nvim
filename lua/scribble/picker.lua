@@ -85,7 +85,7 @@ local function populate_file_list()
 			goto continue
 		end
 
-		local raw_noext = vim.fn.fnamemodify(item, ":t:r")
+		local raw_noext = vim.fn.fnamemodify(item, ":t")
 
 		local fname = fs.decode(raw_noext)
 

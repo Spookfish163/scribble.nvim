@@ -131,11 +131,6 @@ require('scribble').setup{
   height = -1, -- any positive integer, -1 means will use 50% of the total height
   auto_save = true, -- boolean
   path = nil, -- full path to the storage directory, nil will use the standard storage directory inside `~/.local/share/nvim` or equivalent
-
-  -- posible values are hex or underscore! 
-  -- underscore will replace "/" with _ and convert "~/.config/nvim/" to "_.config_nvim"
-  -- hex will just hex encode it
-  encoding = "hex", 
 }
 ```
 

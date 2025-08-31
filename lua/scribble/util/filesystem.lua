@@ -41,43 +41,26 @@ M.path_join = function(...)
 	return table.concat(all_parts, M.path_separator)
 end
 
-M.encode = function(path, encoding)
-	local enc = encoding or config.options.encoding or "hex"
-
-	if enc == "hex" then
-		return vim.text.hexencode(path)
-	elseif enc == "underscore" then
-		-- if name contains _ change it to __
-		local spaced = string.gsub(path, "_", "__")
-		-- if name contains / change it to _
-		spaced = string.gsub(spaced, M.path_separator, "_")
-		return spaced
-	else
-		print("ScribbleError: Unknown file encoding! Use 'hex' or 'underscore'")
-	end
+M.encode = function(path)
+	-- if name contains _ change it to __
+	local spaced = string.gsub(path, "_", "__")
+	-- if name contains / change it to _
+	spaced = string.gsub(spaced, M.path_separator, "_")
+	return spaced
 end
 
-M.decode = function(path, encoding)
-	local enc = encoding or config.options.encoding or "hex"
+M.decode = function(path)
+	local tmp_text = "riset1209384rsite123"
 
-	if enc == "hex" then
-		return vim.text.hexdecode(path)
-	elseif enc == "underscore" then
-		local unquoted = path:sub(2, -2)
-		local tmp_text = "riset1209384rsite123"
+	-- change "__" to some random text
+	local out = string.gsub(path, "__", tmp_text)
 
-		-- change "__" to some random text
-		local out = string.gsub(unquoted, "__", tmp_text)
+	-- change "_" to seperator
+	out = string.gsub(out, "_", M.path_separator)
 
-		-- change "_" to seperator
-		out = string.gsub(out, "_", M.path_separator)
-
-		-- change the random text to "_"
-		out = string.gsub(out, tmp_text, "_")
-		return out
-	else
-		print("ScribbleError: Unknown file encoding! Use 'hex' or 'underscore'")
-	end
+	-- change the random text to "_"
+	out = string.gsub(out, tmp_text, "_")
+	return out
 end
 
 return M
