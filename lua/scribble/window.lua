@@ -40,8 +40,8 @@ function M.open_floating_window(opts)
 
 	buffer.init_buffer()
 
-	local term_width = vim.o.columns
-	local term_height = vim.o.lines
+	local term_width = vim.api.nvim_win_get_width(0)
+	local term_height = vim.api.nvim_win_get_height(0)
 
 	local width = opts.width or math.floor(term_width * 0.75)
 	local height = opts.height or math.floor(term_height / 2)
