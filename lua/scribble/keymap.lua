@@ -21,9 +21,4 @@ function M.add_keymaps(buf, win, callbacks)
 		vim.api.nvim_win_close(win, false)
 	end, { buffer = buf })
 
-	vim.keymap.set("n", "<ESC>", function()
-		vim.api.nvim_win_close(win, false)
-	end, { buffer = buf })
-end
-
 return M
